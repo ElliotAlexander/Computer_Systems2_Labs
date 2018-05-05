@@ -78,6 +78,8 @@ void init(void) {
 
     /* Timer 0 for switch scan interrupt: */
 
+
+    // TCCR - General Timer / Counter Control register
     TCCR0A = _BV(WGM01);  /* CTC Mode, DS Table 14-7 */
     TCCR0B = _BV(CS01)
            | _BV(CS00);   /* Prescaler: F_CPU / 64, DS Table 14-8 */
@@ -86,8 +88,12 @@ void init(void) {
     /* 1 ms --> 1000 Hz, Formula for CTC mode from  DS 14.6.2  */
     /* Note that the formula gives the toggle frequency, which is half the interrupt frequency. */
 
+
+    // OUTPUT COMPARE REGISTER OCR0A/OCR0B
     OCR0A = (uint8_t)(F_CPU / (64.0 * 1000) - 1);
 
+    // Timer Interrupt Mark Register 
+    // All interrupts are individually masked within TIMSK0
     TIMSK0 |= _BV(OCIE0A);  /* Enable timer interrupt, DS 14.8.6  */
 }
 
